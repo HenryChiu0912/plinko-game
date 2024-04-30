@@ -1,0 +1,20 @@
+import time
+import random
+
+def move_ball(start_position, steps):
+    position = start_position
+    print("球現在在第{}格".format(position))
+    time.sleep(0.5)
+
+    for _ in range(steps):
+        direction = random.choice([-1, 1])  # -1代表往左，1代表往右
+        position += direction
+        print("球現在在第{}格".format(position))
+        time.sleep(0.3)
+
+    return position
+
+start_position = 9
+steps = 8
+final_position = move_ball(start_position, steps)
+print("球最後的位置在第{}格".format(final_position))

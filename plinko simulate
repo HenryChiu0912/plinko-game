@@ -1,0 +1,29 @@
+import random
+
+def move_ball(start_position, steps):
+    position = start_position
+
+    for _ in range(steps):
+        direction = random.choice([-1, 1])  # -1代表往左，1代表往右
+        position += direction
+
+    return position
+
+def calculate_probabilities(num_simulations, num_positions, steps):
+    position_counts = [0] * num_positions
+
+    for _ in range(num_simulations):
+        final_position = move_ball(9, steps)
+        position_counts[final_position - 1] += 1
+
+    probabilities = [count / num_simulations for count in position_counts]
+    return probabilities
+
+num_simulations = 1000000
+num_positions = 17
+steps = 8
+
+probabilities = calculate_probabilities(num_simulations, num_positions, steps)
+
+for i, prob in enumerate(probabilities):
+    print("第{}格的機率為 {:.2f}%".format(i + 1, prob * 100))

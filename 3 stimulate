@@ -1,0 +1,52 @@
+import random
+
+def move_ball():
+    ball_position = 9  # 初始位置為第9格
+
+    for _ in range(8):
+        # 以二分之一的機率往左或往右移動一步
+        move_left = random.choice([True, False])
+        if move_left:
+            ball_position -= 1
+        else:
+            ball_position += 1
+
+    return ball_position
+
+def calculate_reward(ball_position, bet):
+    grids = {
+        1: 5.6, 2: 0, 3: 2.1, 4: 0, 5: 1.1,
+        6: 0, 7: 1, 8: 0, 9: 0.5, 10: 0,
+        11: 1, 12: 0, 13: 1.1, 14: 0, 15: 2.1,
+        16: 0, 17: 5.6
+    }
+    reward = grids[ball_position] * bet  # 根據格子的數值計算獎勵
+    return reward
+
+def play_game(initial_money, bet):
+    remaining_money = initial_money
+
+    ball_position = move_ball()
+    reward = calculate_reward(ball_position, bet)
+    remaining_money -= bet
+    remaining_money += reward
+
+    return remaining_money
+
+def monte_carlo_simulation(num_players, initial_money, bet):
+    total_remaining_money = 0
+
+    for _ in range(num_players):
+        remaining_money = play_game(initial_money, bet)
+        total_remaining_money += remaining_money
+
+    average_remaining_money = total_remaining_money / num_players
+    return average_remaining_money
+
+if __name__ == "__main__":
+    num_players = 10000
+    initial_money = 1000
+    bet = 100
+
+    average_remaining_money = monte_carlo_simulation(num_players, initial_money, bet)
+    print("平均還剩下 {:.2f} 元".format(average_remaining_money))

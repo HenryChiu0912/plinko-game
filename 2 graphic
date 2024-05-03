@@ -1,0 +1,78 @@
+import pygame
+import random
+import time
+
+# 初始化 Pygame
+pygame.init()
+
+# 設定視窗大小和顏色
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 200
+BACKGROUND_COLOR = (255, 255, 255)
+
+# 設定格子的大小和顏色
+GRID_WIDTH = 40
+GRID_HEIGHT = 40
+GRID_COLOR = (0, 0, 0)
+
+# 設定球的大小和顏色
+BALL_RADIUS = 15
+BALL_COLOR = (255, 0, 0)
+
+# 設定遊戲參數
+START_POSITION = 9
+STEPS = 8
+
+# 設定每步移動的時間間隔（秒）
+MOVE_INTERVAL = 0.1
+
+# 設定視窗和畫布
+window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption("Moving Ball")
+canvas = window.copy()
+
+# 定義移動球的函數
+def move_ball(start_position, steps):
+    position = start_position
+    for _ in range(steps):
+        direction = random.choice([-1, 1])  # -1代表往左，1代表往右
+        position += direction
+
+        # 繪製球的新位置
+        draw_ball(position)
+
+        # 更新畫面
+        pygame.display.update()
+
+        # 等待一段時間再繼續
+        time.sleep(MOVE_INTERVAL)
+
+# 定義繪製球的函數
+def draw_ball(position):
+    canvas.fill(BACKGROUND_COLOR)
+    for i in range(1, 18):
+        pygame.draw.rect(canvas, GRID_COLOR, (i * GRID_WIDTH, 0, GRID_WIDTH, GRID_HEIGHT), 1)
+    pygame.draw.circle(canvas, BALL_COLOR, (position * GRID_WIDTH + GRID_WIDTH // 2, GRID_HEIGHT // 2), BALL_RADIUS)
+    window.blit(canvas, (0, 0))
+
+# 主程式
+def main():
+    running = True
+
+    # 繪製初始狀態
+    draw_ball(START_POSITION)
+    pygame.display.update()
+
+    # 移動球
+    move_ball(START_POSITION, STEPS)
+
+    # 等待使用者關閉視窗
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()

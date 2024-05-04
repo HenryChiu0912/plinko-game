@@ -1,0 +1,49 @@
+import random
+
+def move_ball():
+    ball_position = 10
+    for i in range(1, 9):
+        move_left = random.choice([True, False])
+        if move_left:
+            ball_position -= 1
+        else:
+            ball_position += 1
+    return ball_position
+
+def calculate_reward(ball_position, bet):
+    grids = {
+        1: 0, 2: 5.6, 3: 0, 4: 2.1, 5: 0,
+        6: 1.1, 7: 0, 8: 1, 9: 0, 10: 0.5,
+        11: 0, 12: 1, 13: 0, 14: 1.1, 15: 0,
+        16: 2.1, 17: 0,18: 5.6, 19: 0,
+    }
+    reward = grids[ball_position] * bet
+    return reward
+
+def play_game(bet):
+    initial_money = 1000
+    remaining_money = initial_money
+    num_plays = 0
+    
+    while remaining_money >= bet:
+        ball_position = move_ball()
+        reward = calculate_reward(ball_position, bet)
+        remaining_money -= bet
+        remaining_money += reward
+        num_plays += 1
+    
+    return num_plays
+
+def monte_carlo_simulation(num_players, bet):
+    total_plays = 0
+    for _ in range(num_players):
+        plays_to_bankruptcy = play_game(bet)
+        total_plays += plays_to_bankruptcy
+    average_plays = total_plays / num_players
+    return average_plays
+
+if __name__ == "__main__":
+    num_players = int(input('有多少人玩:'))
+    bet = int(input('下注多少:'))
+    average_plays = monte_carlo_simulation(num_players, bet)
+    print("平均玩了多少次会输光所有的钱：", average_plays)

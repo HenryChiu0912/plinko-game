@@ -21,7 +21,7 @@ PlinkoBoard = [
     ['|'],[' '],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],[' '],['|'],['8\n'],
     ['|'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['|'],['9\n'],
     ['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['0\n'],
-    ['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0'],['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0\n']
+    ['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0'],['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['1\n']
 ]
 
 the_position = [
@@ -33,6 +33,7 @@ the_position = [
     [0,0,0,0,143,0,145,0,147,0,149,0,151,0,153,0,155],
     [0,0,0,162,0,164,0,166,0,168,0,170,0,172,0,174,0,176],
     [0,0,181,0,183,0,185,0,187,0,189,0,191,0,193,0,195,0,197],
+    [0,0,201,0,203,0,205,0,207,0,209,0,211,0,213,0,215,0,217]
 ]
 
 for row in PlinkoBoard:
@@ -57,17 +58,16 @@ def move_ball():
 
         n = the_position[i-1][ball_position]
         a = np.delete(PlinkoBoard,n, 0)
-        
         b = np.insert(a,n,['o'], 0)
         
-        '''print('i=',i)
+        '''print('i=',i) 
         print('postion=',ball_position)
 
         for row in a:
             for col in row:
                 print(col, end='')
                 if col == '\n':
-                    print()'''
+                    print()'''#檢查a陣列是否出錯
 
         for row in b:
             for col in row:
@@ -109,6 +109,21 @@ def main():
         initial_money -= bet  
         initial_money += reward  
 
+        n = the_position[8][ball_position]
+        a = np.delete(PlinkoBoard, n, 0)
+        b = np.insert(a, n, ['o'], 0)
+        for row in b:
+            for col in row:
+                print(col, end='')
+                if col == '\n':
+                    print()
+
+        '''for row in a:
+            for col in row:
+                print(col, end='')
+                if col == '\n':
+                    print()'''#檢查a陣列是否出錯
+
         print("最後球在第 {} 格".format(ball_position))
         print("您贏得了 {} 元".format(reward))
         print("您現在的錢是: {} 元".format(initial_money))
@@ -117,4 +132,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
     

@@ -67,12 +67,18 @@ for i, prob in enumerate(probabilities):
     ratio.append(prob*100)
 '''print(ratio)'''#檢查機率值是否正確
 
+E = 0
+
 print('每格獎賞倍率:')
 for i in range(2,19,2):
     print('{:0>2d} = '.format(i),end='')
     print('{:.2f}'.format(grids[i]),end=' |')
     print("機率為 {:.2f}%".format(ratio[i-1]))
-    
+    a = grids[i]*ratio[i-1]
+    E = E + a
+
+'''print('期望值為:{:.2f}'.format(E))'''#檢查期望值是否正確
+
 print('機率有一點小誤差屬於合理範圍，所以不用擔心!!!')
 print('_________________________')
 
@@ -173,3 +179,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

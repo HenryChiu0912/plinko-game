@@ -128,7 +128,8 @@ def move_ball():
     return ball_position
 
 def calculate_reward(ball_position, bet):
-    reward = grids[ball_position] * bet  
+    reward = grids[ball_position] * bet 
+    reward = round(reward, 2) 
     return reward
 
 def main():

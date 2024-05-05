@@ -1,0 +1,51 @@
+import random
+
+grids = {
+    1: 0, 2: 3, 3: 0, 4: 2, 5: 0,
+    6: 1.2, 7: 0, 8: 0.9, 9: 0, 10: 0.6,
+    11: 0, 12: 0.9, 13: 0, 14: 1.2, 15: 0,
+    16: 2, 17: 0,18: 3, 19: 0,
+}
+
+def move_ball_simulate(start_position, steps):
+    position = start_position
+
+    for _ in range(steps):
+        direction = random.choice([-1, 1])  # -1代表往左，1代表往右
+        position += direction
+
+    return position
+
+def calculate_probabilities(num_simulations, num_positions, steps):
+    position_counts = [0] * num_positions
+
+    for _ in range(num_simulations):
+        final_position = move_ball_simulate(10, steps)
+        position_counts[final_position - 1] += 1
+
+    probabilities = [count / num_simulations for count in position_counts]
+    return probabilities
+
+num_simulations = 10000000
+num_positions = 19
+steps = 8
+
+probabilities = calculate_probabilities(num_simulations, num_positions, steps)
+
+ratio = []
+for i, prob in enumerate(probabilities):
+    ratio.append(prob*100)
+print(ratio)   #檢查機率值是否正確
+
+E = 0
+
+for i in range(2,19,2):
+    print('{:0>2d} = '.format(i),end='')
+    print('{:.2f}'.format(grids[i]),end=' |')
+    print("機率為 {:.2f}%".format(ratio[i-1]))
+    a = grids[i]*ratio[i-1]
+    E = E + a
+
+print('期望值為:{:.2f}'.format(E)) 
+
+

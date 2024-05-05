@@ -3,10 +3,10 @@ import time
 import numpy as np
 
 grids = {
-    1: 0, 2: 5.6, 3: 0, 4: 2.1, 5: 0,
-    6: 1.1, 7: 0, 8: 1, 9: 0, 10: 0.5,
-    11: 0, 12: 1, 13: 0, 14: 1.1, 15: 0,
-    16: 2.1, 17: 0,18: 5.6, 19: 0,
+    1: 0, 2: 3, 3: 0, 4: 2, 5: 0,
+    6: 1.5, 7: 0, 8: 0.8, 9: 0, 10: 0.6,
+    11: 0, 12: 0.8, 13: 0, 14: 1.5, 15: 0,
+    16: 2, 17: 0,18: 3, 19: 0,
 }
 
 PlinkoBoard = [
@@ -40,7 +40,7 @@ def move_ball_simulate(start_position, steps):
     position = start_position
 
     for _ in range(steps):
-        direction = random.choice([-1, 1])  # -1代表往左，1代表往右
+        direction = random.choice([-1, 1])    
         position += direction
 
     return position
@@ -65,7 +65,7 @@ probabilities = calculate_probabilities(num_simulations, num_positions, steps)
 ratio = []
 for i, prob in enumerate(probabilities):
     ratio.append(prob*100)
-'''print(ratio)'''#檢查機率值是否正確
+#print(ratio)   #檢查機率值是否正確
 
 E = 0
 
@@ -77,7 +77,7 @@ for i in range(2,19,2):
     a = grids[i]*ratio[i-1]
     E = E + a
 
-'''print('期望值為:{:.2f}'.format(E))'''#檢查期望值是否正確
+#print('期望值為:{:.2f}'.format(E))    #檢查期望值是否正確
 
 print('機率有一點小誤差屬於合理範圍，所以不用擔心!!!')
 print('_________________________')
@@ -113,7 +113,7 @@ def move_ball():
             for col in row:
                 print(col, end='')
                 if col == '\n':
-                    print()'''#檢查a陣列是否出錯
+                    print()'''    #檢查a陣列是否出錯
 
         for row in b:
             for col in row:
@@ -163,7 +163,7 @@ def main():
             for col in row:
                 print(col, end='')
                 if col == '\n':
-                    print()'''#檢查a陣列是否出錯
+                    print()'''    #檢查a陣列是否出錯
         
         for row in b:
             for col in row:
@@ -173,10 +173,9 @@ def main():
 
         print("最後球在第 {} 格".format(ball_position))
         print("您贏得了 {} 元".format(reward))
-        print("您現在的錢是: {} 元".format(initial_money))
+        print("您現在的錢是: {:.2f} 元".format(initial_money))
 
     print("您已經沒錢了！遊戲結束！")
 
 if __name__ == "__main__":
     main()
-

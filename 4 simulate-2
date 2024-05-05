@@ -12,12 +12,13 @@ def move_ball():
 
 def calculate_reward(ball_position, bet):
     grids = {
-        1: 0, 2: 5.6, 3: 0, 4: 2.1, 5: 0,
-        6: 1.1, 7: 0, 8: 1, 9: 0, 10: 0.5,
-        11: 0, 12: 1, 13: 0, 14: 1.1, 15: 0,
-        16: 2.1, 17: 0,18: 5.6, 19: 0,
-    }
+        1: 0, 2: 29, 3: 0, 4: 4, 5: 0,
+        6: 1.5, 7: 0, 8: 0.3, 9: 0, 10: 0.2,
+        11: 0, 12: 0.3, 13: 0, 14: 1.5, 15: 0,
+        16: 4, 17: 0,18: 29, 19: 0,
+    }   #高風險
     reward = grids[ball_position] * bet
+    reward = round(reward, 2)
     return reward
 
 def play_game(bet):
@@ -47,3 +48,4 @@ if __name__ == "__main__":
     bet = int(input('下注多少:'))
     average_plays = monte_carlo_simulation(num_players, bet)
     print("平均玩了多少次会输光所有的钱：", average_plays)
+

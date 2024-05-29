@@ -1,0 +1,182 @@
+import random
+import time
+import numpy as np
+
+grids = {
+    1: 0, 2: 4, 3: 0, 4: 2, 5: 0,
+    6: 1, 7: 0, 8: 0.9, 9: 0, 10: 0.8,
+    11: 0, 12: 0.9, 13: 0, 14: 1, 15: 0,
+    16: 2, 17: 0,18: 4, 19: 0,
+}   #極低風險4
+
+PlinkoBoard = [
+    ['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0'],['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0\n'],
+    ['|'],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],['|'],['1\n'],
+    ['|'],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],['*'],[' '],[' '],[' '],[' '],[' '],[' '],[' '],[' '],['|'],['2\n'],
+    ['|'],[' '],[' '],[' '],[' '],[' '],[' '],[' '],['*'],[' '],['*'],[' '],[' '],[' '],[' '],[' '],[' '],[' '],['|'],['3\n'],
+    ['|'],[' '],[' '],[' '],[' '],[' '],[' '],['*'],[' '],['*'],[' '],['*'],[' '],[' '],[' '],[' '],[' '],[' '],['|'],['4\n'],
+    ['|'],[' '],[' '],[' '],[' '],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],[' '],[' '],[' '],[' '],['|'],['5\n'],
+    ['|'],[' '],[' '],[' '],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],[' '],[' '],[' '],['|'],['6\n'],
+    ['|'],[' '],[' '],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],[' '],[' '],['|'],['7\n'],
+    ['|'],[' '],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],[' '],['|'],['8\n'],
+    ['|'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['*'],[' '],['|'],['9\n'],
+    ['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['_'],['|'],['0\n'],
+    ['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0'],['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['0\n']
+]
+
+the_position = [
+    [0,0,0,0,0,0,0,0,0,48,0,50],
+    [0,0,0,0,0,0,0,0,67,0,69,0,71],
+    [0,0,0,0,0,0,0,86,0,88,0,90,0,92],
+    [0,0,0,0,0,0,105,0,107,0,109,0,111,0,113],
+    [0,0,0,0,0,124,0,126,0,128,0,130,0,132,0,134],
+    [0,0,0,0,143,0,145,0,147,0,149,0,151,0,153,0,155],
+    [0,0,0,162,0,164,0,166,0,168,0,170,0,172,0,174,0,176],
+    [0,0,181,0,183,0,185,0,187,0,189,0,191,0,193,0,195,0,197],
+    [0,0,201,0,203,0,205,0,207,0,209,0,211,0,213,0,215,0,217]
+]
+
+def move_ball_simulate(start_position, steps):
+    position = start_position
+
+    for _ in range(steps):
+        direction = random.choice([-1, 1])    
+        position += direction
+
+    return position
+
+def calculate_probabilities(num_simulations, num_positions, steps):
+    position_counts = [0] * num_positions
+
+    for _ in range(num_simulations):
+        final_position = move_ball_simulate(10, steps)
+        position_counts[final_position - 1] += 1
+
+    probabilities = [count / num_simulations for count in position_counts]
+    return probabilities
+
+num_simulations = 100000
+num_positions = 19
+steps = 8
+
+probabilities = calculate_probabilities(num_simulations, num_positions, steps)
+
+
+ratio = []
+for i, prob in enumerate(probabilities):
+    ratio.append(prob*100)
+#print(ratio)   #檢查機率值是否正確
+
+E = 0
+
+print('每格獎賞倍率:')
+for i in range(2,19,2):
+    print('{:0>2d} = '.format(i),end='')
+    print('{:.2f}'.format(grids[i]),end=' |')
+    print("機率為 {:.2f}%".format(ratio[i-1]))
+    a = grids[i]*ratio[i-1]
+    E = E + a
+
+print('期望值為:{:.2f}'.format(E))    #檢查期望值是否正確
+
+print('機率有一點小誤差屬於合理範圍，所以不用擔心!!!')
+print('_________________________')
+
+for row in PlinkoBoard:
+    for col in row:
+        print(col, end='')
+        if col == '\n':
+            print()  
+
+def move_ball():
+    ball_position = 10 
+
+    print("球現在在第 {} 格".format(ball_position))
+    print('_________________________')
+    time.sleep(0.2)
+
+    for i in range(1,9):
+        move_left = random.choice([True, False])
+        if move_left:
+            ball_position -= 1
+        else:
+            ball_position += 1
+
+        n = the_position[i-1][ball_position]
+        a = np.delete(PlinkoBoard,n, 0)
+        b = np.insert(a,n,['o'], 0)
+        
+        '''print('i=',i) 
+        print('postion=',ball_position)
+
+        for row in a:
+            for col in row:
+                print(col, end='')
+                if col == '\n':
+                    print()'''    #檢查a陣列是否出錯
+
+        for row in b:
+            for col in row:
+                print(col, end='')
+                if col == '\n':
+                    print()
+        
+        print("球現在在第 {} 格".format(ball_position))
+        time.sleep(0.2)
+        print('_________________________')
+
+    return ball_position
+
+def calculate_reward(ball_position, bet):
+    reward = grids[ball_position] * bet 
+    reward = round(reward, 2) 
+    return reward
+
+def main():
+    initial_money = int(input("請輸入初始金額: "))
+    print("您的初始錢是: {} 元".format(initial_money))
+
+    while initial_money > 0:
+        bet = 0
+        while True:
+            try:
+                bet = int(input("請下注 (0 結束遊戲且金額小於四百): "))
+                if bet == 0:
+                    print("遊戲結束！")
+                    return
+                elif bet < 0 or bet > initial_money or bet > 400:
+                    print("下注金額不合法！")
+                    continue
+                break
+            except ValueError:
+                print("請輸入一個有效的整數！")
+
+        ball_position = move_ball()
+        reward = calculate_reward(ball_position, bet)
+        initial_money -= bet  
+        initial_money += reward  
+
+        n = the_position[8][ball_position]
+        a = np.delete(PlinkoBoard, n, 0)
+        b = np.insert(a, n, ['o'], 0)
+
+        '''for row in a:
+            for col in row:
+                print(col, end='')
+                if col == '\n':
+                    print()'''    #檢查a陣列是否出錯
+        
+        for row in b:
+            for col in row:
+                print(col, end='')
+                if col == '\n':
+                    print()
+
+        print("最後球在第 {} 格".format(ball_position))
+        print("您贏得了 {} 元".format(reward))
+        print("您現在的錢是: {:.2f} 元".format(initial_money))
+
+    print("您已經沒錢了！遊戲結束！")
+
+if __name__ == "__main__":
+    main()
